@@ -8,6 +8,12 @@
 *.so
 *.dylib
 
+# Binary output
+mackerel-plugin-dump1090
+
+# Build artifacts
+dist/
+
 # Test binary, built with `go test -c`
 *.test
 
