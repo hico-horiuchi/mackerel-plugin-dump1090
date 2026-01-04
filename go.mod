@@ -1,6 +1,6 @@
 module github.com/hico-horiuchi/mackerel-plugin-dump1090
 
-go 1.23
+go 1.25
 
 replace github.com/hico-horiuchi/mackerel-plugin-dump1090/lib => ./lib
 

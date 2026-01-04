@@ -27,13 +27,6 @@ $ ./mackerel-plugin-dump1090 \
   --resource-path=http://192.168.1.201:8080/data \
   --latitude=-34.9285 \
   --longitude=138.6007
-dump1090.aircraft.observed      4       1628155592
-dump1090.aircraft.with_position  1       1628155592
-dump1090.aircraft.with_mlat      0       1628155592
-dump1090.range.max_range         12.345  1628155592
-dump1090.messages.messages_total 90741   1628155592
-dump1090.stats.messages.stats_messages  1234  1628155592
-...
 ```
 
 ### Monitor local dump1090-fa instance
@@ -50,6 +43,7 @@ $ ./mackerel-plugin-dump1090 \
 The plugin collects the following metrics:
 
 ### Aircraft Metrics
+
 - **observed** : Number of aircraft recently observed
 - **with_position** : Number of aircraft with position
 - **with_mlat** : Number of aircraft with multilateration
@@ -57,6 +51,7 @@ The plugin collects the following metrics:
 - **messages_total** : Total number of Mode-S messages
 
 ### Statistics Metrics (from last 1 minute)
+
 - **stats_messages** : Number of Mode-S messages processed
 - **stats_cpr_*** : CPR (Compact Position Reporting) statistics
 - **stats_cpu_*** : CPU usage statistics (background, demod, reader)
@@ -74,12 +69,14 @@ mkr plugin install hico-horiuchi/mackerel-plugin-dump1090
 
 ## Add mackerel-agent.conf
 
+For remote dump1090 instance:
+
 ```
 [plugin.metrics.dump1090]
 command = "/opt/mackerel-agent/plugins/bin/mackerel-plugin-dump1090 --resource-path=http://localhost:8080/data --latitude=YOUR_LAT --longitude=YOUR_LON"
 ```
 
-For local dump1090-fa installation:
+For local dump1090-fa instance:
 
 ```
 [plugin.metrics.dump1090]
