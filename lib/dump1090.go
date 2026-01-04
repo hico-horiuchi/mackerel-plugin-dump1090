@@ -143,9 +143,18 @@ func (d Dump1090Plugin) GraphDefinition() map[string]mp.Graphs {
 			Label: labelPrefix + " Aircraft",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
+				{Name: "aircraft_messages_total", Label: "Messages Total"},
 				{Name: "observed", Label: "Recent Aircraft Observed"},
+				{Name: "with_direction_east", Label: "Recent Aircraft With Direction East"},
+				{Name: "with_direction_north", Label: "Recent Aircraft With Direction North"},
+				{Name: "with_direction_northeast", Label: "Recent Aircraft With Direction Northeast"},
+				{Name: "with_direction_northwest", Label: "Recent Aircraft With Direction Northwest"},
+				{Name: "with_direction_south", Label: "Recent Aircraft With Direction South"},
+				{Name: "with_direction_southeast", Label: "Recent Aircraft With Direction Southeast"},
+				{Name: "with_direction_southwest", Label: "Recent Aircraft With Direction Southwest"},
+				{Name: "with_direction_west", Label: "Recent Aircraft With Direction West"},
+				{Name: "with_multilateration", Label: "Recent Aircraft With Multilateration"},
 				{Name: "with_position", Label: "Recent Aircraft With Position"},
-				{Name: "with_mlat", Label: "Recent Aircraft With Multilateration"},
 			},
 		},
 		"range": {
@@ -153,74 +162,98 @@ func (d Dump1090Plugin) GraphDefinition() map[string]mp.Graphs {
 			Unit:  mp.UnitFloat,
 			Metrics: []mp.Metrics{
 				{Name: "max_range", Label: "Max Range (km)"},
-			},
-		},
-		"messages": {
-			Label: labelPrefix + " Messages",
-			Unit:  mp.UnitInteger,
-			Metrics: []mp.Metrics{
-				{Name: "messages_total", Label: "Messages Total"},
-			},
-		},
-		"stats.messages": {
-			Label: labelPrefix + " Stats Messages",
-			Unit:  mp.UnitInteger,
-			Metrics: []mp.Metrics{
-				{Name: "stats_messages", Label: "Messages"},
+				{Name: "max_range_by_direction.east", Label: "Max Range East (km)"},
+				{Name: "max_range_by_direction.north", Label: "Max Range North (km)"},
+				{Name: "max_range_by_direction.northeast", Label: "Max Range Northeast (km)"},
+				{Name: "max_range_by_direction.northwest", Label: "Max Range Northwest (km)"},
+				{Name: "max_range_by_direction.south", Label: "Max Range South (km)"},
+				{Name: "max_range_by_direction.southeast", Label: "Max Range Southeast (km)"},
+				{Name: "max_range_by_direction.southwest", Label: "Max Range Southwest (km)"},
+				{Name: "max_range_by_direction.west", Label: "Max Range West (km)"},
 			},
 		},
 		"stats.cpr": {
 			Label: labelPrefix + " Stats CPR",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
-				{Name: "stats_cpr_airborne", Label: "CPR Airborne"},
-				{Name: "stats_cpr_surface", Label: "CPR Surface"},
-				{Name: "stats_cpr_global_ok", Label: "CPR Global OK"},
-				{Name: "stats_cpr_local_ok", Label: "CPR Local OK"},
+				{Name: "airborne", Label: "CPR Airborne"},
+				{Name: "filtered", Label: "CPR Filtered"},
+				{Name: "global_bad", Label: "CPR Global Bad"},
+				{Name: "global_ok", Label: "CPR Global OK"},
+				{Name: "global_range", Label: "CPR Global Range"},
+				{Name: "global_skipped", Label: "CPR Global Skipped"},
+				{Name: "global_speed", Label: "CPR Global Speed"},
+				{Name: "local_aircraft_relative", Label: "CPR Local Aircraft Relative"},
+				{Name: "local_ok", Label: "CPR Local OK"},
+				{Name: "local_range", Label: "CPR Local Range"},
+				{Name: "local_receiver_relative", Label: "CPR Local Receiver Relative"},
+				{Name: "local_skipped", Label: "CPR Local Skipped"},
+				{Name: "local_speed", Label: "CPR Local Speed"},
+				{Name: "surface", Label: "CPR Surface"},
 			},
 		},
 		"stats.cpu": {
 			Label: labelPrefix + " Stats CPU",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
-				{Name: "stats_cpu_background", Label: "CPU Background (ms)"},
-				{Name: "stats_cpu_demod", Label: "CPU Demod (ms)"},
-				{Name: "stats_cpu_reader", Label: "CPU Reader (ms)"},
-			},
-		},
-		"stats.local.signal": {
-			Label: labelPrefix + " Stats Local Signal",
-			Unit:  mp.UnitFloat,
-			Metrics: []mp.Metrics{
-				{Name: "stats_local_signal", Label: "Signal Strength (dBFS)"},
-				{Name: "stats_local_peak_signal", Label: "Peak Signal Strength (dBFS)"},
-				{Name: "stats_local_noise", Label: "Noise Level (dBFS)"},
+				{Name: "background.milliseconds", Label: "CPU Background (ms)"},
+				{Name: "demod.milliseconds", Label: "CPU Demod (ms)"},
+				{Name: "reader.milliseconds", Label: "CPU Reader (ms)"},
 			},
 		},
 		"stats.local.messages": {
 			Label: labelPrefix + " Stats Local Messages",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
-				{Name: "stats_local_accepted", Label: "Accepted"},
-				{Name: "stats_local_bad", Label: "Bad"},
-				{Name: "stats_local_modes", Label: "Mode S Preambles"},
-				{Name: "stats_local_strong_signals", Label: "Strong Signals"},
+				{Name: "local_accepted", Label: "Accepted"},
+				{Name: "local_bad", Label: "Bad"},
+				{Name: "local_modeac", Label: "Mode A/C"},
+				{Name: "local_modes", Label: "Mode S Preambles"},
+				{Name: "local_strong_signals", Label: "Strong Signals"},
+				{Name: "local_unknown_icao", Label: "Unknown ICAO"},
 			},
 		},
 		"stats.local.samples": {
 			Label: labelPrefix + " Stats Local Samples",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
-				{Name: "stats_local_samples_processed", Label: "Samples Processed"},
-				{Name: "stats_local_samples_dropped", Label: "Samples Dropped"},
+				{Name: "dropped", Label: "Samples Dropped"},
+				{Name: "processed", Label: "Samples Processed"},
+			},
+		},
+		"stats.local.signal": {
+			Label: labelPrefix + " Stats Local Signal",
+			Unit:  mp.UnitFloat,
+			Metrics: []mp.Metrics{
+				{Name: "noise_level.dbfs", Label: "Noise Level (dBFS)"},
+				{Name: "peak_signal_strength.dbfs", Label: "Peak Signal Strength (dBFS)"},
+				{Name: "signal_strength.dbfs", Label: "Signal Strength (dBFS)"},
+			},
+		},
+		"stats.messages": {
+			Label: labelPrefix + " Stats Messages",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "stats_messages_total", Label: "Messages Total"},
+			},
+		},
+		"stats.remote.messages": {
+			Label: labelPrefix + " Stats Remote Messages",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "remote_accepted", Label: "Accepted"},
+				{Name: "remote_bad", Label: "Bad"},
+				{Name: "remote_modeac", Label: "Mode A/C"},
+				{Name: "remote_modes", Label: "Mode S Preambles"},
+				{Name: "remote_unknown_icao", Label: "Unknown ICAO"},
 			},
 		},
 		"stats.tracks": {
 			Label: labelPrefix + " Stats Tracks",
 			Unit:  mp.UnitInteger,
 			Metrics: []mp.Metrics{
-				{Name: "stats_tracks_all", Label: "All Tracks"},
-				{Name: "stats_tracks_single_message", Label: "Single Message Tracks"},
+				{Name: "all", Label: "All Tracks"},
+				{Name: "single_message", Label: "Single Message Tracks"},
 			},
 		},
 	}
@@ -276,6 +309,36 @@ func calculateDistance(lat1, lon1, lat2, lon2 float64) float64 {
 	return earthRadius * c
 }
 
+// getDirection returns the direction category based on track angle
+func getDirection(track float64) string {
+	// Normalize track to 0-360 range
+	for track < 0 {
+		track += 360
+	}
+	for track >= 360 {
+		track -= 360
+	}
+	
+	// Divide into 8 directions (45 degrees each)
+	if track >= 337.5 || track < 22.5 {
+		return "north"
+	} else if track >= 22.5 && track < 67.5 {
+		return "northeast"
+	} else if track >= 67.5 && track < 112.5 {
+		return "east"
+	} else if track >= 112.5 && track < 157.5 {
+		return "southeast"
+	} else if track >= 157.5 && track < 202.5 {
+		return "south"
+	} else if track >= 202.5 && track < 247.5 {
+		return "southwest"
+	} else if track >= 247.5 && track < 292.5 {
+		return "west"
+	} else {
+		return "northwest"
+	}
+}
+
 // FetchMetrics fetches metrics from dump1090
 func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 	result := make(map[string]float64)
@@ -294,8 +357,12 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 	if err := d.fetchJSON(aircraftPath, &aircraftData); err == nil {
 		observed := len(aircraftData.Aircraft)
 		withPosition := 0
-		withMlat := 0
+		withMultilateration := 0
 		maxRange := 0.0
+		
+		// Direction-based metrics
+		directionCount := make(map[string]int)
+		maxRangeByDirection := make(map[string]float64)
 
 		for _, aircraft := range aircraftData.Aircraft {
 			if aircraft.Lat != nil && aircraft.Lon != nil {
@@ -307,18 +374,33 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 					if distance > maxRange {
 						maxRange = distance
 					}
+					
+					// Track direction-based metrics
+					if aircraft.Track != nil {
+						direction := getDirection(*aircraft.Track)
+						directionCount[direction]++
+						if distance > maxRangeByDirection[direction] {
+							maxRangeByDirection[direction] = distance
+						}
+					}
 				}
 			}
 			if len(aircraft.Mlat) > 0 {
-				withMlat++
+				withMultilateration++
 			}
 		}
 
 		result["observed"] = float64(observed)
 		result["with_position"] = float64(withPosition)
-		result["with_mlat"] = float64(withMlat)
+		result["with_multilateration"] = float64(withMultilateration)
 		result["max_range"] = maxRange
-		result["messages_total"] = float64(aircraftData.Messages)
+		result["aircraft_messages_total"] = float64(aircraftData.Messages)
+		
+		// Set direction counts
+		for _, dir := range []string{"north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"} {
+			result["with_direction_"+dir] = float64(directionCount[dir])
+			result["max_range_by_direction."+dir] = maxRangeByDirection[dir]
+		}
 	}
 
 	// Fetch stats data
@@ -335,63 +417,99 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 		stats := statsData.Last1Min
 
 		if stats.Messages != nil {
-			result["stats_messages"] = float64(*stats.Messages)
+			result["stats_messages_total"] = float64(*stats.Messages)
 		}
 
 		// CPR stats
 		if stats.CPR != nil {
 			if stats.CPR.Airborne != nil {
-				result["stats_cpr_airborne"] = float64(*stats.CPR.Airborne)
+				result["airborne"] = float64(*stats.CPR.Airborne)
 			}
 			if stats.CPR.Surface != nil {
-				result["stats_cpr_surface"] = float64(*stats.CPR.Surface)
+				result["surface"] = float64(*stats.CPR.Surface)
+			}
+			if stats.CPR.Filtered != nil {
+				result["filtered"] = float64(*stats.CPR.Filtered)
+			}
+			if stats.CPR.GlobalBad != nil {
+				result["global_bad"] = float64(*stats.CPR.GlobalBad)
 			}
 			if stats.CPR.GlobalOk != nil {
-				result["stats_cpr_global_ok"] = float64(*stats.CPR.GlobalOk)
+				result["global_ok"] = float64(*stats.CPR.GlobalOk)
+			}
+			if stats.CPR.GlobalRange != nil {
+				result["global_range"] = float64(*stats.CPR.GlobalRange)
+			}
+			if stats.CPR.GlobalSkipped != nil {
+				result["global_skipped"] = float64(*stats.CPR.GlobalSkipped)
+			}
+			if stats.CPR.GlobalSpeed != nil {
+				result["global_speed"] = float64(*stats.CPR.GlobalSpeed)
+			}
+			if stats.CPR.LocalAircraftRelative != nil {
+				result["local_aircraft_relative"] = float64(*stats.CPR.LocalAircraftRelative)
 			}
 			if stats.CPR.LocalOk != nil {
-				result["stats_cpr_local_ok"] = float64(*stats.CPR.LocalOk)
+				result["local_ok"] = float64(*stats.CPR.LocalOk)
+			}
+			if stats.CPR.LocalRange != nil {
+				result["local_range"] = float64(*stats.CPR.LocalRange)
+			}
+			if stats.CPR.LocalReceiverRelative != nil {
+				result["local_receiver_relative"] = float64(*stats.CPR.LocalReceiverRelative)
+			}
+			if stats.CPR.LocalSkipped != nil {
+				result["local_skipped"] = float64(*stats.CPR.LocalSkipped)
+			}
+			if stats.CPR.LocalSpeed != nil {
+				result["local_speed"] = float64(*stats.CPR.LocalSpeed)
 			}
 		}
 
 		// CPU stats
 		if stats.CPU != nil {
 			if stats.CPU.Background != nil {
-				result["stats_cpu_background"] = float64(*stats.CPU.Background)
+				result["background.milliseconds"] = float64(*stats.CPU.Background)
 			}
 			if stats.CPU.Demod != nil {
-				result["stats_cpu_demod"] = float64(*stats.CPU.Demod)
+				result["demod.milliseconds"] = float64(*stats.CPU.Demod)
 			}
 			if stats.CPU.Reader != nil {
-				result["stats_cpu_reader"] = float64(*stats.CPU.Reader)
+				result["reader.milliseconds"] = float64(*stats.CPU.Reader)
 			}
 		}
 
 		// Local stats
 		if stats.Local != nil {
 			if stats.Local.Signal != nil {
-				result["stats_local_signal"] = *stats.Local.Signal
+				result["signal_strength.dbfs"] = *stats.Local.Signal
 			}
 			if stats.Local.PeakSignal != nil {
-				result["stats_local_peak_signal"] = *stats.Local.PeakSignal
+				result["peak_signal_strength.dbfs"] = *stats.Local.PeakSignal
 			}
 			if stats.Local.Noise != nil {
-				result["stats_local_noise"] = *stats.Local.Noise
+				result["noise_level.dbfs"] = *stats.Local.Noise
 			}
 			if stats.Local.StrongSignals != nil {
-				result["stats_local_strong_signals"] = float64(*stats.Local.StrongSignals)
+				result["local_strong_signals"] = float64(*stats.Local.StrongSignals)
 			}
 			if stats.Local.Bad != nil {
-				result["stats_local_bad"] = float64(*stats.Local.Bad)
+				result["local_bad"] = float64(*stats.Local.Bad)
 			}
 			if stats.Local.Modes != nil {
-				result["stats_local_modes"] = float64(*stats.Local.Modes)
+				result["local_modes"] = float64(*stats.Local.Modes)
+			}
+			if stats.Local.ModeAC != nil {
+				result["local_modeac"] = float64(*stats.Local.ModeAC)
+			}
+			if stats.Local.UnknownICAO != nil {
+				result["local_unknown_icao"] = float64(*stats.Local.UnknownICAO)
 			}
 			if stats.Local.SamplesProcessed != nil {
-				result["stats_local_samples_processed"] = float64(*stats.Local.SamplesProcessed)
+				result["processed"] = float64(*stats.Local.SamplesProcessed)
 			}
 			if stats.Local.SamplesDropped != nil {
-				result["stats_local_samples_dropped"] = float64(*stats.Local.SamplesDropped)
+				result["dropped"] = float64(*stats.Local.SamplesDropped)
 			}
 			// Sum up accepted array if present
 			if len(stats.Local.Accepted) > 0 {
@@ -399,17 +517,41 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 				for _, v := range stats.Local.Accepted {
 					total += v
 				}
-				result["stats_local_accepted"] = float64(total)
+				result["local_accepted"] = float64(total)
+			}
+		}
+
+		// Remote stats
+		if stats.Remote != nil {
+			if stats.Remote.Bad != nil {
+				result["remote_bad"] = float64(*stats.Remote.Bad)
+			}
+			if stats.Remote.Modes != nil {
+				result["remote_modes"] = float64(*stats.Remote.Modes)
+			}
+			if stats.Remote.ModeAC != nil {
+				result["remote_modeac"] = float64(*stats.Remote.ModeAC)
+			}
+			if stats.Remote.UnknownICAO != nil {
+				result["remote_unknown_icao"] = float64(*stats.Remote.UnknownICAO)
+			}
+			// Sum up accepted array if present
+			if len(stats.Remote.Accepted) > 0 {
+				var total int64
+				for _, v := range stats.Remote.Accepted {
+					total += v
+				}
+				result["remote_accepted"] = float64(total)
 			}
 		}
 
 		// Tracks stats
 		if stats.Tracks != nil {
 			if stats.Tracks.All != nil {
-				result["stats_tracks_all"] = float64(*stats.Tracks.All)
+				result["all"] = float64(*stats.Tracks.All)
 			}
 			if stats.Tracks.SingleMessage != nil {
-				result["stats_tracks_single_message"] = float64(*stats.Tracks.SingleMessage)
+				result["single_message"] = float64(*stats.Tracks.SingleMessage)
 			}
 		}
 	}
