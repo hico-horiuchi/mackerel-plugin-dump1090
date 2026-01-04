@@ -14,6 +14,8 @@ import (
 	"time"
 
 	mp "github.com/mackerelio/go-mackerel-plugin"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // Dump1090Plugin represents the plugin
@@ -134,7 +136,8 @@ func (d Dump1090Plugin) MetricKeyPrefix() string {
 
 // GraphDefinition returns graph definitions
 func (d Dump1090Plugin) GraphDefinition() map[string]mp.Graphs {
-	labelPrefix := strings.Title(d.prefix)
+	caser := cases.Title(language.English)
+	labelPrefix := caser.String(d.prefix)
 	return map[string]mp.Graphs{
 		"aircraft": {
 			Label: labelPrefix + " Aircraft",
@@ -278,7 +281,7 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 	result := make(map[string]float64)
 
 	// Fetch aircraft data
-	aircraftPath := filepath.Join(d.resourcePath, "aircraft.json")
+	var aircraftPath string
 	if !strings.HasPrefix(d.resourcePath, "http://") && !strings.HasPrefix(d.resourcePath, "https://") {
 		// For file paths, use filepath.Join
 		aircraftPath = filepath.Join(d.resourcePath, "aircraft.json")
@@ -319,7 +322,7 @@ func (d Dump1090Plugin) FetchMetrics() (map[string]float64, error) {
 	}
 
 	// Fetch stats data
-	statsPath := filepath.Join(d.resourcePath, "stats.json")
+	var statsPath string
 	if !strings.HasPrefix(d.resourcePath, "http://") && !strings.HasPrefix(d.resourcePath, "https://") {
 		statsPath = filepath.Join(d.resourcePath, "stats.json")
 	} else {
